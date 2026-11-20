@@ -122,7 +122,7 @@ export function App() {
       : abudiData.projects.filter((project) => project.category === selectedCategory);
 
   const renderServiceIcon = (iconName: ServiceItem['iconName']) => {
-    const iconProps = { className: 'w-7 h-7 text-rose-400' };
+    const iconProps = { className: 'w-7 h-7 text-rose-400 transition-transform duration-300 group-hover:rotate-6' };
     switch (iconName) {
       case 'palette':
         return <Palette {...iconProps} />;
@@ -140,27 +140,70 @@ export function App() {
   )}`;
 
   return (
-    <div className="min-h-screen bg-[#1A0508] text-stone-100 font-sans selection:bg-rose-500 selection:text-white">
+    <div className="min-h-screen bg-[#1A0508] text-stone-100 font-sans selection:bg-rose-500 selection:text-white scroll-smooth">
+      {/* CUSTOM ANIMATION STYLES */}
+      <style>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(24px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+        @keyframes floatSlow {
+          0%, 100% {
+            transform: translateY(0px) scale(1);
+          }
+          50% {
+            transform: translateY(-14px) scale(1.04);
+          }
+        }
+        .animate-fade-up {
+          animation: fadeInUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+        }
+        .animate-delay-100 {
+          animation-delay: 0.1s;
+        }
+        .animate-delay-200 {
+          animation-delay: 0.2s;
+        }
+        .animate-delay-300 {
+          animation-delay: 0.3s;
+        }
+        .animate-delay-400 {
+          animation-delay: 0.4s;
+        }
+        .animate-float {
+          animation: floatSlow 6s ease-in-out infinite;
+        }
+      `}</style>
+
       {/* NAVBAR */}
-      <nav className="sticky top-0 z-50 bg-[#1A0508]/90 backdrop-blur-md border-b border-rose-500/20">
+      <nav className="sticky top-0 z-50 bg-[#1A0508]/90 backdrop-blur-md border-b border-rose-500/20 transition-all">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            <a href="#home" className="text-2xl font-extrabold tracking-wider">
-              <span className="text-white">{abudiData.nickname.toUpperCase()}</span>
-              <span className="text-rose-500">.</span>
+            <a href="#home" className="text-2xl font-extrabold tracking-wider group">
+              <span className="text-white group-hover:text-rose-200 transition-colors">
+                {abudiData.nickname.toUpperCase()}
+              </span>
+              <span className="text-rose-500 inline-block transition-transform duration-300 group-hover:scale-125">.</span>
             </a>
 
             <div className="hidden md:flex items-center space-x-8 text-sm font-medium">
-              <a href="#about" className="hover:text-rose-400 transition-colors">Tentang Saya</a>
-              <a href="#services" className="hover:text-rose-400 transition-colors">Layanan</a>
-              <a href="#portfolio" className="hover:text-rose-400 transition-colors">Portofolio</a>
-              <a
-                href={whatsappUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="px-5 py-2.5 rounded-full bg-linear-to-r from-red-600 via-red-700 to-[#5A0B18] border border-rose-400/50 text-white font-semibold hover:brightness-110 transition-all shadow-lg shadow-red-950/50"
-              >
-                Sewa Jasa
+              <a href="#about" className="relative py-1 hover:text-rose-400 transition-colors after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-rose-400 hover:after:w-full after:transition-all after:duration-300">
+                Tentang Saya
+              </a>
+              <a href="#services" className="relative py-1 hover:text-rose-400 transition-colors after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-rose-400 hover:after:w-full after:transition-all after:duration-300">
+                Layanan
+              </a>
+              <a href="#portfolio" className="relative py-1 hover:text-rose-400 transition-colors after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-rose-400 hover:after:w-full after:transition-all after:duration-300">
+                Portofolio
+              </a>
+              <a href="#contact" className="relative py-1 hover:text-rose-400 transition-colors after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-0 after:h-0.5 after:bg-rose-400 hover:after:w-full after:transition-all after:duration-300">
+                Kontak
               </a>
             </div>
 
@@ -169,7 +212,7 @@ export function App() {
                 type="button"
                 aria-label="Toggle Menu"
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="text-rose-400 p-2"
+                className="text-rose-400 p-2 transition-transform active:scale-90"
               >
                 {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
@@ -178,63 +221,56 @@ export function App() {
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#2B080D] border-b border-rose-500/20 px-4 pt-2 pb-5 space-y-3">
-            <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-stone-200 hover:text-rose-400">Tentang Saya</a>
-            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-stone-200 hover:text-rose-400">Layanan</a>
-            <a href="#portfolio" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-stone-200 hover:text-rose-400">Portofolio</a>
-            <a
-              href={whatsappUrl}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="block text-center py-2.5 rounded-lg bg-linear-to-r from-red-600 to-rose-600 text-white font-bold"
-            >
-              Hubungi Saya via WhatsApp
-            </a>
+          <div className="md:hidden bg-[#2B080D] border-b border-rose-500/20 px-4 pt-2 pb-5 space-y-2 animate-fade-up">
+            <a href="#about" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-stone-200 hover:text-rose-400 transition-colors">Tentang Saya</a>
+            <a href="#services" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-stone-200 hover:text-rose-400 transition-colors">Layanan</a>
+            <a href="#portfolio" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-stone-200 hover:text-rose-400 transition-colors">Portofolio</a>
+            <a href="#contact" onClick={() => setMobileMenuOpen(false)} className="block py-2 text-stone-200 hover:text-rose-400 transition-colors">Kontak</a>
           </div>
         )}
       </nav>
 
       {/* HERO SECTION */}
       <section id="home" className="relative overflow-hidden py-24 sm:py-32 bg-linear-to-br from-[#3D0811] via-[#24060B] to-[#1A0508]">
-        <div className="absolute -top-24 -right-24 w-96 h-96 bg-red-600/20 rounded-full blur-3xl pointer-events-none" />
-        <div className="absolute bottom-0 left-10 w-72 h-72 bg-rose-500/15 rounded-full blur-3xl pointer-events-none" />
+        <div className="absolute -top-24 -right-24 w-96 h-96 bg-red-600/25 rounded-full blur-3xl pointer-events-none animate-float" />
+        <div className="absolute bottom-0 left-10 w-72 h-72 bg-rose-500/15 rounded-full blur-3xl pointer-events-none animate-float" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#4A0B16] border border-rose-400/40 text-rose-200 text-xs sm:text-sm font-medium">
-            <Award className="w-4 h-4 text-rose-400" />
+          <div className="animate-fade-up inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-[#4A0B16] border border-rose-400/40 text-rose-200 text-xs sm:text-sm font-medium shadow-md">
+            <Award className="w-4 h-4 text-rose-400 animate-pulse" />
             <span>Tersedia untuk Proyek Freelance & Kolaborasi Industri</span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
+          <h1 className="animate-fade-up animate-delay-100 text-4xl sm:text-5xl lg:text-6xl font-extrabold leading-tight">
             Halo, Saya{' '}
             <span className="text-transparent bg-clip-text bg-linear-to-r from-rose-300 via-red-400 to-rose-500">
               {abudiData.fullName}
             </span>
           </h1>
 
-          <div className="flex flex-wrap justify-center gap-2 items-center text-lg sm:text-xl font-semibold text-rose-300">
+          <div className="animate-fade-up animate-delay-200 flex flex-wrap justify-center gap-2 items-center text-lg sm:text-xl font-semibold text-rose-300">
             <span>{abudiData.roles[0]}</span>
             <span className="text-red-500">•</span>
             <span>{abudiData.roles[1]}</span>
           </div>
 
-          <p className="text-stone-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
+          <p className="animate-fade-up animate-delay-300 text-stone-300 text-base sm:text-lg leading-relaxed max-w-2xl mx-auto">
             {abudiData.tagline}
           </p>
 
-          <div className="flex flex-wrap justify-center gap-4 pt-4">
+          <div className="animate-fade-up animate-delay-400 flex flex-wrap justify-center gap-4 pt-4">
             <a
               href={whatsappUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-linear-to-r from-red-600 to-rose-600 text-white font-bold hover:from-red-500 hover:to-rose-500 transition-all shadow-lg shadow-red-600/30"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-linear-to-r from-red-600 to-rose-600 text-white font-bold hover:from-red-500 hover:to-rose-500 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-lg shadow-red-600/30"
             >
               <MessageCircle className="w-5 h-5" />
               Hubungi Saya
             </a>
             <a
               href="#portfolio"
-              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#380912] border border-red-500/50 text-white font-semibold hover:border-rose-400 transition-all"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-xl bg-[#380912] border border-red-500/50 text-white font-semibold hover:border-rose-400 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
             >
               Lihat Karya
             </a>
@@ -251,22 +287,22 @@ export function App() {
             <div className="w-20 h-1 bg-linear-to-r from-red-600 to-rose-400 mx-auto mt-4 rounded-full" />
           </div>
 
-          <div className="bg-linear-to-br from-[#350911] to-[#24060B] border border-rose-500/25 rounded-3xl p-8 sm:p-10 shadow-xl">
+          <div className="bg-linear-to-br from-[#350911] to-[#24060B] border border-rose-500/25 hover:border-rose-400/50 rounded-3xl p-8 sm:p-10 shadow-xl transition-all duration-500 hover:shadow-2xl hover:shadow-red-950/50">
             <p className="text-stone-200 text-lg sm:text-xl leading-relaxed text-center italic">
               &ldquo;{abudiData.aboutMe}&rdquo;
             </p>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mt-8 pt-8 border-t border-rose-500/20">
-              <div className="flex items-center justify-center gap-2 text-rose-200 font-medium">
-                <CheckCircle2 className="w-5 h-5 text-red-500" />
+              <div className="flex items-center justify-center gap-2 text-rose-200 font-medium transition-transform duration-300 hover:scale-105">
+                <CheckCircle2 className="w-5 h-5 text-red-500 shrink-0" />
                 <span>Disiplin & Tepat Waktu</span>
               </div>
-              <div className="flex items-center justify-center gap-2 text-rose-200 font-medium">
-                <CheckCircle2 className="w-5 h-5 text-red-500" />
+              <div className="flex items-center justify-center gap-2 text-rose-200 font-medium transition-transform duration-300 hover:scale-105">
+                <CheckCircle2 className="w-5 h-5 text-red-500 shrink-0" />
                 <span>Berorientasi Bisnis & Solusi</span>
               </div>
-              <div className="flex items-center justify-center gap-2 text-rose-200 font-medium">
-                <CheckCircle2 className="w-5 h-5 text-red-500" />
+              <div className="flex items-center justify-center gap-2 text-rose-200 font-medium transition-transform duration-300 hover:scale-105">
+                <CheckCircle2 className="w-5 h-5 text-red-500 shrink-0" />
                 <span>Adaptif terhadap Teknologi</span>
               </div>
             </div>
@@ -287,9 +323,9 @@ export function App() {
             {abudiData.services.map((service) => (
               <div
                 key={service.id}
-                className="group bg-[#2B070E] border border-red-900/60 hover:border-rose-400/70 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-1 shadow-lg"
+                className="group bg-[#2B070E] border border-red-900/60 hover:border-rose-400/70 rounded-2xl p-6 transition-all duration-300 hover:-translate-y-2 shadow-lg hover:shadow-xl hover:shadow-rose-950/40"
               >
-                <div className="w-14 h-14 rounded-xl bg-[#450B16] border border-rose-400/30 flex items-center justify-center mb-5 group-hover:scale-110 transition-transform">
+                <div className="w-14 h-14 rounded-xl bg-[#450B16] border border-rose-400/30 flex items-center justify-center mb-5 group-hover:scale-110 group-hover:bg-rose-500/20 transition-all duration-300">
                   {renderServiceIcon(service.iconName)}
                 </div>
                 <h3 className="text-lg font-bold text-white mb-2 group-hover:text-rose-300 transition-colors">
@@ -317,10 +353,10 @@ export function App() {
                 type="button"
                 key={cat}
                 onClick={() => setSelectedCategory(cat)}
-                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all ${
+                className={`px-5 py-2 rounded-full text-sm font-semibold transition-all duration-300 active:scale-95 ${
                   selectedCategory === cat
-                    ? 'bg-linear-to-r from-red-600 to-rose-600 text-white shadow-md shadow-red-600/25'
-                    : 'bg-[#350911] text-stone-300 border border-red-800/50 hover:border-rose-400/50'
+                    ? 'bg-linear-to-r from-red-600 to-rose-600 text-white shadow-md shadow-red-600/30 scale-105'
+                    : 'bg-[#350911] text-stone-300 border border-red-800/50 hover:border-rose-400/50 hover:text-white'
                 }`}
               >
                 {cat}
@@ -328,17 +364,18 @@ export function App() {
             ))}
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8">
-            {filteredProjects.map((project) => (
+          <div key={selectedCategory} className="grid md:grid-cols-2 gap-8">
+            {filteredProjects.map((project, index) => (
               <div
                 key={project.id}
-                className="group bg-[#2D070E] border border-red-900/60 hover:border-rose-400/60 rounded-2xl overflow-hidden shadow-xl transition-all"
+                style={{ animationDelay: `${index * 0.1}s` }}
+                className="animate-fade-up group bg-[#2D070E] border border-red-900/60 hover:border-rose-400/60 rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl hover:shadow-rose-950/40 hover:-translate-y-1.5 transition-all duration-300"
               >
                 <div className="relative h-60 overflow-hidden">
                   <img
                     src={project.imageUrl}
                     alt={project.title}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700 ease-out"
                   />
                   <span className="absolute top-4 left-4 px-3 py-1 rounded-full text-xs font-bold bg-[#1A0508]/85 text-rose-300 border border-rose-400/40 backdrop-blur-sm">
                     {project.category}
@@ -367,10 +404,10 @@ export function App() {
                       href={project.projectUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-rose-400 hover:text-rose-300"
+                      className="inline-flex items-center gap-1.5 text-sm font-semibold text-rose-400 hover:text-rose-300 group/link"
                     >
                       <span>Detail</span>
-                      <ExternalLink className="w-4 h-4" />
+                      <ExternalLink className="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
                     </a>
                   </div>
                 </div>
@@ -383,7 +420,7 @@ export function App() {
       {/* CTA / CONTACT SECTION */}
       <section id="contact" className="py-20 bg-linear-to-b from-[#1A0508] to-[#3B0811]">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <div className="bg-[#2B070E] border-2 border-rose-500/40 rounded-3xl p-8 sm:p-12 shadow-2xl">
+          <div className="bg-[#2B070E] border-2 border-rose-500/40 hover:border-rose-400/70 rounded-3xl p-8 sm:p-12 shadow-2xl transition-all duration-500">
             <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4">
               Siap Mewujudkan Ide Visual Anda?
             </h2>
@@ -396,14 +433,14 @@ export function App() {
                 href={whatsappUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-linear-to-r from-red-600 to-rose-600 text-white font-bold text-base hover:brightness-110 transition-all shadow-lg shadow-red-600/30"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-linear-to-r from-red-600 to-rose-600 text-white font-bold text-base hover:brightness-110 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300 shadow-lg shadow-red-600/30"
               >
                 <MessageCircle className="w-5 h-5" />
                 Chat WhatsApp Sekarang
               </a>
               <a
                 href={`mailto:${abudiData.email}`}
-                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-red-950/60 border border-red-500/50 text-white font-semibold hover:border-rose-400 transition-all"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-red-950/60 border border-red-500/50 text-white font-semibold hover:border-rose-400 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-300"
               >
                 <Mail className="w-5 h-5 text-rose-400" />
                 Kirim Email
@@ -426,7 +463,7 @@ export function App() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram"
-              className="text-stone-400 hover:text-rose-400 transition-colors"
+              className="text-stone-400 hover:text-rose-400 hover:scale-110 transition-all duration-300"
             >
               <Instagram className="w-5 h-5" />
             </a>
@@ -435,7 +472,7 @@ export function App() {
               target="_blank"
               rel="noopener noreferrer"
               aria-label="GitHub"
-              className="text-stone-400 hover:text-rose-400 transition-colors"
+              className="text-stone-400 hover:text-rose-400 hover:scale-110 transition-all duration-300"
             >
               <Github className="w-5 h-5" />
             </a>
